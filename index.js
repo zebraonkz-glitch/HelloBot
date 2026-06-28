@@ -15,11 +15,21 @@ const greetings = [
   'Доброе время суток!',
 ];
 
+let lastGreeting = null;
+
+function pickGreeting() {
+  const available = lastGreeting
+    ? greetings.filter((g) => g !== lastGreeting)
+    : greetings;
+  const greeting = available[Math.floor(Math.random() * available.length)];
+  lastGreeting = greeting;
+  return greeting;
+}
+
 const bot = new Telegraf(token);
 
 bot.on('message', (ctx) => {
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-  ctx.reply(greeting);
+  ctx.reply(pickGreeting());
 });
 
 bot.launch().then(() => {
